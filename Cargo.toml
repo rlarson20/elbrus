@@ -15,6 +15,13 @@ members = [
 	"crates/elbrus-wasm",
 ]
 
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "MIT OR Apache-2.0"
+authors = ["RJ Larson"]
+
+
 [workspace.dependencies]
 ### Core
 uuid = { version = "1", features = ["v4", "serde"] }

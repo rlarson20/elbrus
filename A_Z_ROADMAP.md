@@ -860,4 +860,4 @@ see `.github/workflows/ci.yml`
 
 #### One Thing to Do Today
 
-Bootstrap the workspace and get `elbrus-core` compiling with all types above. That's your keystone — every other crate is blocked on it. Two hours of focused work gets you to `cargo test -p elbrus-core` green, and then the rest of the build order flows naturally.
+TO UPDATE

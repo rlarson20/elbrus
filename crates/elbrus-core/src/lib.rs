@@ -1,6 +1,7 @@
 pub mod card;
 pub mod color;
 pub mod error;
+pub mod game;
 pub mod keyword;
 pub mod legality;
 pub mod mana;
@@ -11,6 +12,7 @@ pub mod types;
 pub use card::*;
 pub use color::*;
 pub use error::*;
+pub use game::*;
 pub use keyword::*;
 pub use legality::*;
 pub use mana::*;

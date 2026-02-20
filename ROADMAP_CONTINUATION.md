@@ -8,16 +8,17 @@
 
 ## Phase 0 — Repository Hygiene
 
-- [ ] Add `LICENSE` file (Apache-2.0 full text) to repo root
-- [ ] Add `.github/workflows/ci.yml`
-  - [ ] `cargo fmt --all -- --check`
-  - [ ] `cargo clippy --all-targets --all-features -- -D warnings`
-  - [ ] `cargo test --all-features` (with `SQLX_OFFLINE=true`)
-  - [ ] `cargo build -p elbrus-wasm --target wasm32-unknown-unknown --no-default-features`
-  - [ ] `maturin build -m crates/elbrus-py/Cargo.toml --no-sdist`
+- [x] Add `LICENSE` file (Apache-2.0 full text) to repo root
+- [/] Add `.github/workflows/ci.yml`
+  - [x] `cargo fmt --all -- --check`
+  - [x] `cargo clippy --all-targets --all-features -- -D warnings`
+  - [x] `cargo test --all-features` (with `SQLX_OFFLINE=true`)
+  - [x] `cargo build -p elbrus-wasm --target wasm32-unknown-unknown --no-default-features`
+  - [x] `maturin build -m crates/elbrus-py/Cargo.toml --no-sdist`
+  - [ ] revise and ensure that everything you want to handle is handled
 - [ ] Add `sqlx-data.json` offline cache workflow (`cargo sqlx prepare`)
 - [ ] Verify entire workspace compiles: `cargo check --workspace --all-features`
-- [ ] Add `ObjectId(u32)` and `ZoneId(u8)` newtypes to `elbrus-core` (forward-compat for Phase 5)
+- [x] Add `ObjectId(u32)` and `ZoneId(u8)` newtypes to `elbrus-core` (forward-compat for Phase 5)
 
 ---
 

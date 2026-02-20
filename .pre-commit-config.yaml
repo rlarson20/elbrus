@@ -1,0 +1,99 @@
+# Install:
+#   pip install pre-commit
+#   pre-commit install   # installs pre-commit + commit-msg stages (see default_install_hook_types)
+#
+# Run manually against all files:
+#   pre-commit run --all-files
+#
+# Skip a hook in an emergency:
+#   SKIP=cargo-clippy git commit …
+
+default_install_hook_types: [pre-commit, commit-msg]
+default_stages: [pre-commit]
+
+repos:
+  # ── File hygiene ────────────────────────────────────────────────────────────
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+        args: [--fix=lf]
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: check-toml
+      - id: check-json
+      - id: check-added-large-files
+        # 500 KB hard limit; Scryfall JSON lives in /data (gitignored), not the repo
+        args: [--maxkb=500]
+
+  # ── Secret scanning ─────────────────────────────────────────────────────────
+  # Requires: brew install gitleaks
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.23.3
+    hooks:
+      - id: gitleaks
+
+  # ── Conventional commits ────────────────────────────────────────────────────
+  # Enforces: <type>[(scope)][!]: <description>
+  # Allowed types are listed in args below.
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v3.6.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+        args:
+          - feat # new feature
+          - fix # bug fix
+          - docs # documentation only
+          - style # formatting, whitespace (no logic change)
+          - refactor # neither fix nor feature
+          - perf # performance improvement
+          - test # add/fix tests
+          - chore # tooling, deps, CI plumbing
+          - ci # CI config changes
+          - build # build system / dependency changes
+          - revert # revert a prior commit
+
+  # ── Rust ────────────────────────────────────────────────────────────────────
+  - repo: local
+    hooks:
+      # Format check — use `cargo fmt --all` locally to auto-fix before committing.
+      # Hook intentionally uses --check so fmt failures are explicit.
+      - id: cargo-fmt
+        name: cargo fmt
+        entry: cargo fmt --all -- --check
+        language: system
+        types: [rust]
+        pass_filenames: false
+
+      # Clippy — mirrors CI exactly; -D warnings means any lint is a hard failure.
+      # TODO: improve lint quality (pedantic lints, specific issues that come up several times)
+      - id: cargo-clippy
+        name: cargo clippy
+        entry: cargo clippy --workspace --all-targets --all-features -- -D warnings
+        language: system
+        types: [rust]
+        pass_filenames: false
+
+      # SQLx offline — verifies sqlx-data.json covers all query! macros.
+      # Only runs when elbrus-db source or migrations change.
+      # If this fails: run `cargo sqlx prepare --workspace` and commit the updated cache.
+      - id: sqlx-offline-check
+        name: sqlx offline check
+        entry: env SQLX_OFFLINE=true cargo check -p elbrus-db
+        language: system
+        files: ^crates/elbrus-db/
+        types_or: [rust, toml, sql]
+        pass_filenames: false
+
+      # Unit tests only — lib tests, no integration tests in tests/ dirs.
+      # Keep this fast; integration tests belong in CI only.
+      - id: cargo-test-unit
+        name: cargo test (unit)
+        entry: cargo test --workspace --lib
+        language: system
+        types: [rust]
+        pass_filenames: false

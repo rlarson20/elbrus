@@ -1,0 +1,17 @@
+# .gitleaks.toml — gitleaks configuration
+# Allowlist known false positives specific to this repo.
+# See: https://github.com/gitleaks/gitleaks#configuration
+
+title = "elbrus gitleaks config"
+
+[allowlist]
+description = "global allowlist"
+
+# Scryfall UUIDs look like secrets to naive entropy scanners — they're not.
+regexes = [
+	# uuid v4 pattern as used throughout the codebase as test fixtures
+	'''[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}''',
+]
+
+# Ignore vendored / generated paths that may contain high-entropy strings
+paths = ['''sqlx-data\.json''', '''Cargo\.lock''']

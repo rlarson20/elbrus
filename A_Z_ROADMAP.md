@@ -6,7 +6,7 @@ I'm building elbrus, a Rust workspace of MtG developer libraries. It should be f
 Workspace crates:
 
 - `elbrus-core` — canonical types/traits, zero I/O deps
-- `elbrus-scryfall` — bulk ingest + optional live API (`feature = "live"`)
+- `elbrus-scryfall` — bulk ingest
 - `elbrus-db` — SQLite via sqlx, FTS5, owns all migrations
 - `elbrus-deck` — parse/validate Arena, MTGO, Moxfield formats
 - `elbrus-rules` — CR text parser, keyword registry, format legality (sim later)
@@ -70,7 +70,7 @@ Phase 5 (Rules Sim)      rules-P2 (zone/stack model)
 | Serde roundtrip  | All core types must `serde_json::from_str(serde_json::to_string(&v)) == Ok(v)` | Required for WASM postMessage and Python pickle |
 | WASM storage     | Abstract `StorageBackend` trait in `elbrus-db`                                 | OPFS/absurd-sql swap without API break          |
 | Keyword registry | `#[non_exhaustive] enum Keyword` + `UnknownKeyword(Arc<str>)` variant          | CR adds keywords; don't break consumers         |
-| Feature flags    | `live` on scryfall, `fts` on db, `sim` on rules                                | Keep WASM bundle minimal                        |
+| Feature flags    | `fts` on db, `sim` on rules                                                    | Keep WASM bundle minimal                        |
 
 ---
 
@@ -115,9 +115,6 @@ futures    = "0.3"
 ### DB
 sqlx = { version = "0.8", features = ["runtime-tokio", "sqlite", "uuid", "chrono", "macros"] }
 
-### HTTP (optional/live)
-reqwest = { version = "0.12", features = ["json", "stream"], default-features = false }
-
 ### Bindings
 pyo3       = { version = "0.23", features = ["extension-module"] }
 wasm-bindgen = "0.2"
@@ -148,13 +145,13 @@ crates/
 │       ├── ruling.rs
 │       └── error.rs
 ├── elbrus-scryfall/
-│   ├── Cargo.toml          ### features = ["live"], depends on elbrus-db
+│   ├── Cargo.toml
 │   └── src/
 │       ├── lib.rs
 │       ├── bulk.rs         ### streaming JSON ingest
 │       ├── models.rs       ### ScryfallCard (raw deserialization target)
 │       ├── convert.rs      ### ScryfallCard → core::Card
-│       └── api.rs          ### feature = "live"
+│       └── api.rs
 ├── elbrus-db/
 │   ├── Cargo.toml          ### features = ["fts"]
 │   ├── migrations/
@@ -818,6 +815,7 @@ When using `bitflags!`, serialize/deserialize support is not automatic even if t
 ---
 
 #### CI Skeleton
+
 see `.github/workflows/ci.yml`
 
 ---

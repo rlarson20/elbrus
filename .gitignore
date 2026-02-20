@@ -1,4 +1,5 @@
 /target
+/data
 #they have their own git repos; for now ignore, they're references for new implementations
 /moxfield_to_forge
 /pyMTG

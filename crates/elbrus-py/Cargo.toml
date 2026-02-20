@@ -1,0 +1,16 @@
+[package]
+name = "elbrus-py"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+
+[lib]
+name = "elbrus"
+crate-type = ["cdylib"]
+
+[dependencies]
+elbrus-core = { path = "../elbrus-core" }
+elbrus-db = { path = "../elbrus-db" }
+pyo3.workspace = true
+serde_json.workspace = true
+tokio.workspace = true

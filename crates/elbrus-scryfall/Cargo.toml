@@ -1,0 +1,19 @@
+[package]
+name = "elbrus-scryfall"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+
+[dependencies]
+elbrus-core = { path = "../elbrus-core" }
+elbrus-db = { path = "../elbrus-db" }
+uuid.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+futures.workspace = true
+reqwest = { workspace = true, optional = true }
+
+[features]
+live = ["dep:reqwest"]

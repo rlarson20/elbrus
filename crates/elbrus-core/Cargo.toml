@@ -1,0 +1,17 @@
+[package]
+name = "elbrus-core"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+
+[dependencies]
+uuid.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+chrono.workspace = true
+rust_decimal.workspace = true
+arc-swap.workspace = true
+smallvec.workspace = true
+indexmap.workspace = true
+bitflags = { version = "2", features = ["serde"] }

@@ -1,0 +1,19 @@
+[package]
+name = "elbrus-db"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+
+[dependencies]
+elbrus-core = { path = "../elbrus-core" }
+uuid.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+sqlx.workspace = true
+tokio.workspace = true
+async-trait = "0.1"
+futures.workspace = true
+
+[features]
+fts = []

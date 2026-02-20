@@ -1,0 +1,11 @@
+[package]
+name = "elbrus-collection"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+
+[dependencies]
+elbrus-core = { path = "../elbrus-core" }
+uuid.workspace = true
+serde.workspace = true
+thiserror.workspace = true

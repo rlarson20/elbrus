@@ -1,0 +1,12 @@
+[package]
+name = "elbrus-cli"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+
+[dependencies]
+elbrus-core = { path = "../elbrus-core" }
+elbrus-scryfall = { path = "../elbrus-scryfall" }
+elbrus-db = { path = "../elbrus-db" }
+anyhow.workspace = true
+tokio.workspace = true

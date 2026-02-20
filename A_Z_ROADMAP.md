@@ -807,52 +807,18 @@ The compile-time `query!` macro checks against an actual SQLite file at compile 
 - Migration runner at startup: `sqlx::migrate!("./migrations").run(&pool).await?`
 - Keep all `query!` macros in `elbrus-db` only — never in other crates.
 
-##### 7. Python 3.14 Compatibility (Temporary)
-
-Due to the very recent release of Python 3.14, `pyo3 v0.23` requires an environment variable to bypass version checks if building against 3.14 before official stability:
-`PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1 cargo build`
-
-##### 8. Serialization of `Arc<str>`
+##### 7. Serialization of `Arc<str>`
 
 By default, `serde` does not implement `Serialize`/`Deserialize` for `Arc<T>`. Ensure the `rc` feature is enabled in the workspace `serde` dependency to allow `Arc<str>` to be used as a drop-in for `String` in core types while maintaining `Clone`-cheap efficiency.
 
-##### 9. Bitflags and Serde
+##### 8. Bitflags and Serde
 
 When using `bitflags!`, serialize/deserialize support is not automatic even if types inside have it. Always enable the `serde` feature in the `bitflags` dependency to allow `ColorSet` and other bitmask types to round-trip through JSON correctly.
 
 ---
 
 #### CI Skeleton
-
-```yaml
-### .github/workflows/ci.yml
-name: CI
-on: [push, pull_request]
-jobs:
-  check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-        with: { targets: "wasm32-unknown-unknown" }
-      - uses: Swatinem/rust-cache@v2
-      - run: cargo fmt --all -- --check
-      - run: cargo clippy --all-targets --all-features -- -D warnings
-      - run: cargo test --all-features
-        env: { SQLX_OFFLINE: true }
-      - run: cargo build -p elbrus-wasm --target wasm32-unknown-unknown --no-default-features
-      - run: pip install maturin && maturin build -m crates/elbrus-py/Cargo.toml --no-sdist
-
-  publish:
-    if: startsWith(github.ref, 'refs/tags/')
-    needs: check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-      - run: cargo publish -p elbrus-core
-      ### ... ordered by dependency graph
-```
+see `.github/workflows/ci.yml`
 
 ---
 

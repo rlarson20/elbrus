@@ -62,7 +62,6 @@
   - [ ] Yield batches of `chunk_size` (default 500) `(OracleCard, Printing)` pairs
   - [ ] Track and emit `IngestStats`
 - [ ] Implement `BulkIngestor::ingest_into_db()` — stream + batch-insert via `CardRepository`
-- [ ] Create `api.rs` stub file (even if behind `feature = "live"` and empty)
 - [ ] Add integration test: ingest a small sample JSON file, verify card count and field values
 
 ### 1C. `elbrus-db` — SQLite Schema & Implementation

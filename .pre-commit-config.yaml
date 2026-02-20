@@ -30,7 +30,7 @@ repos:
         args: [--maxkb=500]
 
   # ── Secret scanning ─────────────────────────────────────────────────────────
-  # Requires: brew install gitleaks
+  # Requires: brew install gitleaks  (or cargo install gitleaks, or the binary)
   - repo: https://github.com/gitleaks/gitleaks
     rev: v8.23.3
     hooks:
@@ -38,12 +38,16 @@ repos:
 
   # ── Conventional commits ────────────────────────────────────────────────────
   # Enforces: <type>[(scope)][!]: <description>
-  # Allowed types are listed in args below.
-  - repo: https://github.com/compilerla/conventional-pre-commit
-    rev: v3.6.0
+  # On failure, re-opens $GIT_EDITOR via /dev/tty for in-place editing.
+  # Requires: uv (for `uvx conventional-pre-commit`)
+  - repo: local
     hooks:
       - id: conventional-pre-commit
+        name: conventional commits
+        entry: scripts/check-conventional-commit.sh
+        language: script
         stages: [commit-msg]
+        pass_filenames: true # pre-commit passes COMMIT_EDITMSG path as $1
         args:
           - feat # new feature
           - fix # bug fix
@@ -70,7 +74,6 @@ repos:
         pass_filenames: false
 
       # Clippy — mirrors CI exactly; -D warnings means any lint is a hard failure.
-      # TODO: improve lint quality (pedantic lints, specific issues that come up several times)
       - id: cargo-clippy
         name: cargo clippy
         entry: cargo clippy --workspace --all-targets --all-features -- -D warnings

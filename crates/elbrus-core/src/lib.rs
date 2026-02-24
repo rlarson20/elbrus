@@ -1,4 +1,5 @@
 pub mod card;
+pub mod collection;
 pub mod color;
 pub mod error;
 pub mod game;
@@ -10,6 +11,7 @@ pub mod ruling;
 pub mod types;
 
 pub use card::*;
+pub use collection::*;
 pub use color::*;
 pub use error::*;
 pub use game::*;

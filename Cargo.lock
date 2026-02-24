@@ -398,10 +398,13 @@ name = "elbrus-db"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "chrono",
  "elbrus-core",
  "futures",
+ "rust_decimal",
  "serde",
  "serde_json",
+ "smallvec",
  "sqlx",
  "thiserror",
  "tokio",

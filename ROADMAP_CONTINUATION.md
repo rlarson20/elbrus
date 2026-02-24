@@ -53,9 +53,9 @@
   - [x] `search_fts()` — FTS5 MATCH query (feature-gated)
   - [x] `cards_in_set()` — SELECT printings WHERE set_code = ?
   - [x] `legal_in_format()` — JSON query on legalities column
-- [ ] Implement `repo/price.rs` — price snapshot queries
-- [ ] Implement `repo/collection.rs` — collection CRUD (basic structure for Phase 2)
-- [ ] Add integration tests: open in-memory db → ingest test data → query → verify
+- [x] Implement `repo/price.rs` — price snapshot queries
+- [x] Implement `repo/collection.rs` — collection CRUD (basic structure for Phase 2)
+- [x] Add integration tests: open in-memory db → ingest test data → query → verify
 
 ### 1B. `elbrus-scryfall` — Bulk Ingest Pipeline
 

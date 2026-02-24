@@ -16,3 +16,4 @@ arc-swap.workspace = true
 smallvec.workspace = true
 indexmap.workspace = true
 bitflags = { version = "2", features = ["serde"] }
+nom = "8.0.0"

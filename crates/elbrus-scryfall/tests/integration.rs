@@ -19,7 +19,7 @@ async fn test_ingest_sample() {
         .await
         .expect("Failed to ingest");
 
-    // We expect exactly 50 cards evaluated in sample.json (generated with seed 42)
+    // We expect exactly 50 cards evaluated in sample.json (generated with seed 357)
     assert_eq!(stats.cards_processed, 50);
 
     // Validate card existence of the first card from the sample

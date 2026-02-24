@@ -89,9 +89,9 @@
 > Wire up just enough CLI to validate the full ingest pipeline end-to-end. This is your
 > integration test harness before implementing real parsers.
 
-- [ ] Add `clap` dependency to `elbrus-cli`
+- [x] Add `clap` dependency to `elbrus-cli`
 - [ ] Implement `elbrus ingest <path>` subcommand — runs `BulkIngestor::ingest_into_db`, prints `IngestStats`
-- [ ] Download `oracle-cards` bulk export from Scryfall (or use `scripts/download_bulk.py`)
+- [x] Download `oracle-cards` bulk export from Scryfall (or use `scripts/download_bulk.py`)
 - [ ] Ingest full bulk file; verify it completes in < 60s and card counts match Scryfall totals
 
 ### 1D. `elbrus-core` — Implement Parser Method Bodies

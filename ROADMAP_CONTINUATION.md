@@ -2,7 +2,7 @@
 
 > Living checklist for tracking implementation progress.
 > Mark items: `[ ]` not started · `[/]` in progress · `[x]` done
-> Last updated: 2026-02-20
+> Last updated: 2026-02-24
 
 ---
 
@@ -22,49 +22,13 @@
 
 ---
 
-## Phase 1 — Foundation (`elbrus-core` → `elbrus-scryfall` → `elbrus-db`)
+## Phase 1 — Foundation (`elbrus-db` → `elbrus-scryfall` → `elbrus-core`)
 
-### 1A. `elbrus-core` — Implement Method Bodies
+> **Build order rationale:** get data moving before implementing parsers. `ManaCost::parse`,
+> `TypeLine::parse`, etc. are implemented _after_ ingest works — at that point you have a real
+> corpus to write tests against. Use fallback/stub conversions in `convert.rs` until then (see 1B).
 
-- [ ] `ManaCost::parse(s: &str)` — parse `{W}{U}{2}` notation into `SmallVec<ManaSymbol>`
-  - [ ] Handle all `ManaSymbol` variants: colored, generic, variable (X), colorless (C), snow, hybrid, mono-hybrid, phyrexian, hybrid-phyrexian, tap
-  - [ ] Handle edge cases: `{X}{X}`, `{CHAOS}`, `{½}`, `{100}`
-- [ ] `ManaCost::cmc()` — sum converted mana values of all symbols
-  - [ ] Colored/colorless/phyrexian/snow = 1, generic = N, variable = 0, hybrid = max(a,b), mono-hybrid = 2
-- [ ] `ManaCost::color_identity()` — union of all colored pips into `ColorSet`
-- [ ] `ColorSet::devotion(color)` — count pips of given color in a cost
-- [ ] `TypeLine::parse(s: &str)` — split on ` — ` (em-dash), parse supertypes/types/subtypes
-  - [ ] Handle cards with no subtypes, multiple supertypes, unknown types → `Unknown(Arc<str>)`
-- [ ] `OracleText::to_display_string()` — concatenate segments back to readable text
-- [ ] `Keyword::takes_cost()` — return `true` for Cycling, Kicker, Equip, Morph, Ninjutsu, etc.
-- [ ] `Keyword::is_evasion()` — return `true` for Flying, Menace, Intimidate, Fear, Shadow, etc.
-- [ ] Add unit tests for all parsers: `ManaCost::parse`, `TypeLine::parse`
-- [ ] Add serde round-trip tests: `serde_json::from_str(serde_json::to_string(&v)) == Ok(v)` for all core types
-
-### 1B. `elbrus-scryfall` — Bulk Ingest Pipeline
-
-- [ ] Define `ScryfallCard` struct in `models.rs` — mirror Scryfall JSON 1:1
-  - [ ] All card-level fields: `id`, `oracle_id`, `name`, `layout`, `mana_cost`, `type_line`, `oracle_text`, `colors`, `color_identity`, `keywords`, `legalities`, `set`, `collector_number`, `rarity`, `released_at`, `image_uris`, `prices`, etc.
-  - [ ] `card_faces: Option<Vec<ScryfallCardFace>>` for multi-face cards
-  - [ ] `#[serde(default)]` on optional fields for robustness
-- [ ] Implement `convert.rs` — `ScryfallCard` → `(OracleCard, Printing)`
-  - [ ] Map `ScryfallCard.layout` string → `CardLayout` enum
-  - [ ] Parse `mana_cost` string → `ManaCost`
-  - [ ] Parse `type_line` string → `TypeLine`
-  - [ ] Convert oracle text string → `OracleText` (initial: wrap entire text in `OracleTextSegment::Text`)
-  - [ ] Map `card_faces` → `SmallVec<[CardFace; 2]>`
-  - [ ] Map `legalities` HashMap → `Legalities`
-  - [ ] Map `prices` → `PriceSnapshot` with `rust_decimal` parsing
-  - [ ] Map `image_uris` → `ImageUris`
-  - [ ] Handle all card layouts: normal, split, flip, transform, modal_dfc, meld, adventure, etc.
-- [ ] Implement `BulkIngestor::ingest_file()` — streaming JSON parse
-  - [ ] Use `serde_json::StreamDeserializer` or manual `[` / `]` / `,` token scanning to avoid loading full file into RAM
-  - [ ] Yield batches of `chunk_size` (default 500) `(OracleCard, Printing)` pairs
-  - [ ] Track and emit `IngestStats`
-- [ ] Implement `BulkIngestor::ingest_into_db()` — stream + batch-insert via `CardRepository`
-- [ ] Add integration test: ingest a small sample JSON file, verify card count and field values
-
-### 1C. `elbrus-db` — SQLite Schema & Implementation
+### 1A. `elbrus-db` — SQLite Schema & Implementation
 
 - [ ] Create `crates/elbrus-db/migrations/` directory
 - [ ] Write migration `001_initial_schema.sql`
@@ -93,12 +57,69 @@
 - [ ] Implement `repo/collection.rs` — collection CRUD (basic structure for Phase 2)
 - [ ] Add integration tests: open in-memory db → ingest test data → query → verify
 
-### 1D. End-to-End Validation
+### 1B. `elbrus-scryfall` — Bulk Ingest Pipeline
+
+> **Stub conversions:** `ManaCost`, `TypeLine`, and `OracleText` conversions use fallback paths
+> here. Unknown/unparsed values wrap raw strings rather than calling `todo!()`, so ingest works
+> end-to-end before parsers are implemented. Replace stub paths in 1C.
+
+- [ ] Define `ScryfallCard` struct in `models.rs` — mirror Scryfall JSON 1:1
+  - [ ] All card-level fields: `id`, `oracle_id`, `name`, `layout`, `mana_cost`, `type_line`, `oracle_text`, `colors`, `color_identity`, `keywords`, `legalities`, `set`, `collector_number`, `rarity`, `released_at`, `image_uris`, `prices`, etc.
+  - [ ] `card_faces: Option<Vec<ScryfallCardFace>>` for multi-face cards
+  - [ ] `#[serde(default)]` on optional fields for robustness
+- [ ] Implement `convert.rs` — `ScryfallCard` → `(OracleCard, Printing)` with stub converters
+  - [ ] Map `ScryfallCard.layout` string → `CardLayout` enum (unknown layouts → `CardLayout::Unknown`)
+  - [ ] Stub: `mana_cost` string → `ManaCost` via `ManaCost::parse` with `unwrap_or_else` fallback to `ManaSymbol::Unknown(raw)`
+  - [ ] Stub: `type_line` string → `TypeLine` via `TypeLine::parse` with `unwrap_or_else` fallback to whole string as one `Subtype`
+  - [ ] Stub: oracle text string → `OracleText` wrapping entire text as single `OracleTextSegment::Text`
+  - [ ] Map `card_faces` → `SmallVec<[CardFace; 2]>`
+  - [ ] Map `legalities` HashMap → `Legalities`
+  - [ ] Map `prices` → `PriceSnapshot` with `rust_decimal` parsing
+  - [ ] Map `image_uris` → `ImageUris`
+  - [ ] Handle all card layouts: normal, split, flip, transform, modal_dfc, meld, adventure, etc.
+- [ ] Implement `BulkIngestor::ingest_file()` — streaming JSON parse
+  - [ ] Use `serde_json::Deserializer::from_reader(file).into_iter::<ScryfallCard>()` — streams without loading full file into RAM
+  - [ ] Yield batches of `chunk_size` (default 500) `(OracleCard, Printing)` pairs
+  - [ ] Track and emit `IngestStats`
+- [ ] Implement `BulkIngestor::ingest_into_db()` — stream + batch-insert via `CardRepository`
+- [ ] Add integration test: ingest a small sample JSON file, verify card count and field values
+
+### 1C. `elbrus-cli` — Ingest Smoke Test
+
+> Wire up just enough CLI to validate the full ingest pipeline end-to-end. This is your
+> integration test harness before implementing real parsers.
+
+- [ ] Add `clap` dependency to `elbrus-cli`
+- [ ] Implement `elbrus ingest <path>` subcommand — runs `BulkIngestor::ingest_into_db`, prints `IngestStats`
+- [ ] Download `oracle-cards` bulk export from Scryfall (or use `scripts/download_bulk.py`)
+- [ ] Ingest full bulk file; verify it completes in < 60s and card counts match Scryfall totals
+
+### 1D. `elbrus-core` — Implement Parser Method Bodies
+
+> Now that real bulk data is flowing, pull edge-case examples from the DB and write failing
+> tests _before_ implementing each parser (test-first).
+
+- [ ] `ManaCost::parse(s: &str)` — parse `{W}{U}{2}` notation into `SmallVec<ManaSymbol>`
+  - [ ] Handle all `ManaSymbol` variants: colored, generic, variable (X), colorless (C), snow, hybrid, mono-hybrid, phyrexian, hybrid-phyrexian, tap
+  - [ ] Handle edge cases: `{X}{X}`, `{CHAOS}`, `{½}`, `{100}`
+- [ ] `ManaCost::cmc()` — sum converted mana values of all symbols
+  - [ ] Colored/colorless/phyrexian/snow = 1, generic = N, variable = 0, hybrid = max(a,b), mono-hybrid = 2
+- [ ] `ManaCost::color_identity()` — union of all colored pips into `ColorSet`
+- [ ] `ColorSet::devotion(color)` — count pips of given color in a cost
+- [ ] `TypeLine::parse(s: &str)` — split on `—` (em-dash), parse supertypes/types/subtypes
+  - [ ] Handle cards with no subtypes, multiple supertypes, unknown types → `Unknown(Arc<str>)`
+- [ ] `OracleText::to_display_string()` — concatenate segments back to readable text
+- [ ] `Keyword::takes_cost()` — return `true` for Cycling, Kicker, Equip, Morph, Ninjutsu, etc.
+- [ ] `Keyword::is_evasion()` — return `true` for Flying, Menace, Intimidate, Fear, Shadow, etc.
+- [ ] Add unit tests for all parsers seeded with real edge cases from ingested data
+- [ ] Add serde round-trip tests: `serde_json::from_str(serde_json::to_string(&v)) == Ok(v)` for all core types
+- [ ] Replace stub converter paths in `convert.rs` with real parser calls (fallbacks remain for true unknowns)
+
+### 1E. End-to-End Validation
 
 - [ ] Download `oracle-cards` bulk export from Scryfall
-- [ ] Ingest full bulk file into SQLite via `BulkIngestor::ingest_into_db`
+- [ ] Re-ingest full bulk file with real parsers active; verify counts still match
 - [ ] Benchmark: ingest must complete in < 60s
-- [ ] Verify card counts match expected Scryfall totals
 - [ ] Run `cargo fmt --all -- --check` (clean)
 - [ ] Run `cargo clippy --all-targets --all-features -- -D warnings` (clean)
 - [ ] Run `cargo test --all-features` (all pass)

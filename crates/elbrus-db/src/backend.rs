@@ -18,6 +18,7 @@ pub trait StorageBackend: Send + Sync {
     async fn query(&self, sql: &str, params: &[Value]) -> Result<Vec<Row>, DbError>;
     async fn transaction<F, T>(&self, f: F) -> Result<T, DbError>
     where
+        T: Send,
         F: FnOnce(&mut dyn Transaction) -> BoxFuture<'_, Result<T, DbError>> + Send;
 }
 

@@ -39,11 +39,11 @@
 - [x] Write migration `002_fts5.sql` (behind `fts` feature)
   - [x] Create FTS5 virtual table on `card_faces.name` + `card_faces.oracle_text`
   - [x] Create triggers to keep FTS index in sync on INSERT/UPDATE/DELETE
-- [ ] Implement `SqliteBackend` struct in `sqlite.rs`
-  - [ ] Wrap `sqlx::SqlitePool`
-  - [ ] Implement `StorageBackend` trait (execute, query, transaction)
-  - [ ] Add `SqliteBackend::open(path)` and `SqliteBackend::open_in_memory()` constructors
-  - [ ] Run migrations on open: `sqlx::migrate!("./migrations").run(&pool).await?`
+- [x] Implement `SqliteBackend` struct in `sqlite.rs`
+  - [x] Wrap `sqlx::SqlitePool`
+  - [x] Implement `StorageBackend` trait (execute, query, transaction)
+  - [x] Add `SqliteBackend::open(path)` and `SqliteBackend::open_in_memory()` constructors
+  - [x] Run migrations on open: `sqlx::migrate!("./migrations").run(&pool).await?`
 - [ ] Implement `CardRepository` for `SqliteBackend` in `repo/card.rs`
   - [ ] `upsert_oracle()` — INSERT OR REPLACE oracle card + faces
   - [ ] `upsert_printing()` — INSERT OR REPLACE printing

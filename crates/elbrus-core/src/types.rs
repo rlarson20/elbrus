@@ -63,6 +63,8 @@ impl TypeLine {
         })
     }
     pub fn parse(_s: &str) -> Result<Self, crate::error::CoreError> {
-        todo!()
+        Err(crate::error::CoreError::ParseError(
+            "not implemented".into(),
+        ))
     }
 }

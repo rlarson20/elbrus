@@ -63,26 +63,26 @@
 > here. Unknown/unparsed values wrap raw strings rather than calling `todo!()`, so ingest works
 > end-to-end before parsers are implemented. Replace stub paths in 1C.
 
-- [ ] Define `ScryfallCard` struct in `models.rs` — mirror Scryfall JSON 1:1
-  - [ ] All card-level fields: `id`, `oracle_id`, `name`, `layout`, `mana_cost`, `type_line`, `oracle_text`, `colors`, `color_identity`, `keywords`, `legalities`, `set`, `collector_number`, `rarity`, `released_at`, `image_uris`, `prices`, etc.
-  - [ ] `card_faces: Option<Vec<ScryfallCardFace>>` for multi-face cards
-  - [ ] `#[serde(default)]` on optional fields for robustness
-- [ ] Implement `convert.rs` — `ScryfallCard` → `(OracleCard, Printing)` with stub converters
-  - [ ] Map `ScryfallCard.layout` string → `CardLayout` enum (unknown layouts → `CardLayout::Unknown`)
-  - [ ] Stub: `mana_cost` string → `ManaCost` via `ManaCost::parse` with `unwrap_or_else` fallback to `ManaSymbol::Unknown(raw)`
-  - [ ] Stub: `type_line` string → `TypeLine` via `TypeLine::parse` with `unwrap_or_else` fallback to whole string as one `Subtype`
-  - [ ] Stub: oracle text string → `OracleText` wrapping entire text as single `OracleTextSegment::Text`
-  - [ ] Map `card_faces` → `SmallVec<[CardFace; 2]>`
-  - [ ] Map `legalities` HashMap → `Legalities`
-  - [ ] Map `prices` → `PriceSnapshot` with `rust_decimal` parsing
-  - [ ] Map `image_uris` → `ImageUris`
-  - [ ] Handle all card layouts: normal, split, flip, transform, modal_dfc, meld, adventure, etc.
-- [ ] Implement `BulkIngestor::ingest_file()` — streaming JSON parse
-  - [ ] Use `serde_json::Deserializer::from_reader(file).into_iter::<ScryfallCard>()` — streams without loading full file into RAM
-  - [ ] Yield batches of `chunk_size` (default 500) `(OracleCard, Printing)` pairs
-  - [ ] Track and emit `IngestStats`
-- [ ] Implement `BulkIngestor::ingest_into_db()` — stream + batch-insert via `CardRepository`
-- [ ] Add integration test: ingest a small sample JSON file, verify card count and field values
+- [x] Define `ScryfallCard` struct in `models.rs` — mirror Scryfall JSON 1:1
+  - [x] All card-level fields: `id`, `oracle_id`, `name`, `layout`, `mana_cost`, `type_line`, `oracle_text`, `colors`, `color_identity`, `keywords`, `legalities`, `set`, `collector_number`, `rarity`, `released_at`, `image_uris`, `prices`, etc.
+  - [x] `card_faces: Option<Vec<ScryfallCardFace>>` for multi-face cards
+  - [x] `#[serde(default)]` on optional fields for robustness
+- [x] Implement `convert.rs` — `ScryfallCard` → `(OracleCard, Printing)` with stub converters
+  - [x] Map `ScryfallCard.layout` string → `CardLayout` enum (unknown layouts → `CardLayout::Unknown`)
+  - [x] Stub: `mana_cost` string → `ManaCost` via `ManaCost::parse` with `unwrap_or_else` fallback to `ManaSymbol::Unknown(raw)`
+  - [x] Stub: `type_line` string → `TypeLine` via `TypeLine::parse` with `unwrap_or_else` fallback to whole string as one `Subtype`
+  - [x] Stub: oracle text string → `OracleText` wrapping entire text as single `OracleTextSegment::Text`
+  - [x] Map `card_faces` → `SmallVec<[CardFace; 2]>`
+  - [x] Map `legalities` HashMap → `Legalities`
+  - [x] Map `prices` → `PriceSnapshot` with `rust_decimal` parsing
+  - [x] Map `image_uris` → `ImageUris`
+  - [x] Handle all card layouts: normal, split, flip, transform, modal_dfc, meld, adventure, etc.
+- [x] Implement `BulkIngestor::ingest_file()` — streaming JSON parse
+  - [x] Use `serde_json::Deserializer::from_reader(file).into_iter::<ScryfallCard>()` — streams without loading full file into RAM
+  - [x] Yield batches of `chunk_size` (default 500) `(OracleCard, Printing)` pairs
+  - [x] Track and emit `IngestStats`
+- [x] Implement `BulkIngestor::ingest_into_db()` — stream + batch-insert via `CardRepository`
+- [x] Add integration test: ingest a small sample JSON file, verify card count and field values
 
 ### 1C. `elbrus-cli` — Ingest Smoke Test
 

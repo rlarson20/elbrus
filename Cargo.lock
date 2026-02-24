@@ -458,11 +458,13 @@ dependencies = [
 name = "elbrus-scryfall"
 version = "0.1.0"
 dependencies = [
+ "chrono",
  "elbrus-core",
  "elbrus-db",
  "futures",
  "serde",
  "serde_json",
+ "smallvec",
  "thiserror",
  "tokio",
  "uuid",

@@ -45,11 +45,11 @@ pub enum CardLayout {
     Unknown(Arc<str>),
 }
 
-/// The Oracle card — one record per unique oracle_id.
+/// The Oracle card — one record per unique `oracle_id`.
 /// Printing-specific data (set, collector number, art, prices) lives in `Printing`.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct OracleCard {
-    /// Scryfall oracle_id — stable across printings.
+    /// Scryfall `oracle_id` — stable across printings.
     pub oracle_id: Uuid,
     pub layout: CardLayout,
     pub faces: smallvec::SmallVec<[CardFace; 2]>,
@@ -61,12 +61,15 @@ pub struct OracleCard {
 }
 
 impl OracleCard {
+    #[must_use]
     pub fn primary_face(&self) -> &CardFace {
         &self.faces[0]
     }
+    #[must_use]
     pub fn name(&self) -> &str {
         &self.primary_face().name
     }
+    #[must_use]
     pub fn cmc(&self) -> f32 {
         self.primary_face()
             .mana_cost

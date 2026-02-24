@@ -44,15 +44,15 @@
   - [x] Implement `StorageBackend` trait (execute, query, transaction)
   - [x] Add `SqliteBackend::open(path)` and `SqliteBackend::open_in_memory()` constructors
   - [x] Run migrations on open: `sqlx::migrate!("./migrations").run(&pool).await?`
-- [ ] Implement `CardRepository` for `SqliteBackend` in `repo/card.rs`
-  - [ ] `upsert_oracle()` — INSERT OR REPLACE oracle card + faces
-  - [ ] `upsert_printing()` — INSERT OR REPLACE printing
-  - [ ] `get_by_id()` — SELECT printing by Scryfall UUID
-  - [ ] `get_oracle()` — SELECT oracle card + join faces by oracle_id
-  - [ ] `search_name()` — LIKE query on card_faces.name
-  - [ ] `search_fts()` — FTS5 MATCH query (feature-gated)
-  - [ ] `cards_in_set()` — SELECT printings WHERE set_code = ?
-  - [ ] `legal_in_format()` — JSON query on legalities column
+- [x] Implement `CardRepository` for `SqliteBackend` in `repo/card.rs`
+  - [x] `upsert_oracle()` — INSERT OR REPLACE oracle card + faces
+  - [x] `upsert_printing()` — INSERT OR REPLACE printing
+  - [x] `get_by_id()` — SELECT printing by Scryfall UUID
+  - [x] `get_oracle()` — SELECT oracle card + join faces by oracle_id
+  - [x] `search_name()` — LIKE query on card_faces.name
+  - [x] `search_fts()` — FTS5 MATCH query (feature-gated)
+  - [x] `cards_in_set()` — SELECT printings WHERE set_code = ?
+  - [x] `legal_in_format()` — JSON query on legalities column
 - [ ] Implement `repo/price.rs` — price snapshot queries
 - [ ] Implement `repo/collection.rs` — collection CRUD (basic structure for Phase 2)
 - [ ] Add integration tests: open in-memory db → ingest test data → query → verify

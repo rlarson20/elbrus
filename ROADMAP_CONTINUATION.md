@@ -30,15 +30,15 @@
 
 ### 1A. `elbrus-db` — SQLite Schema & Implementation
 
-- [ ] Create `crates/elbrus-db/migrations/` directory
-- [ ] Write migration `001_initial_schema.sql`
-  - [ ] `oracle_cards` table: `oracle_id UUID PK`, `layout TEXT`, `color_identity INTEGER`, `keywords TEXT (JSON)`, `legalities TEXT (JSON)`, `edh_rank INTEGER`, `reserved BOOLEAN`
-  - [ ] `card_faces` table: `oracle_id UUID FK`, `face_index INTEGER`, `name TEXT`, `mana_cost TEXT`, `type_line TEXT`, `oracle_text TEXT`, `colors INTEGER`, `power TEXT`, `toughness TEXT`, `loyalty TEXT`, `defense TEXT`, `flavor_text TEXT`
-  - [ ] `printings` table: `id UUID PK`, `oracle_id UUID FK`, `set_code TEXT`, `collector_number TEXT`, `rarity TEXT`, `lang TEXT`, `released_at TEXT`, `image_uris TEXT (JSON)`, `promo BOOLEAN`, `digital BOOLEAN`, `full_art BOOLEAN`, `textless BOOLEAN`, `reprint BOOLEAN`, `prices TEXT (JSON)`
-  - [ ] Indexes: on `oracle_cards.oracle_id`, `printings.oracle_id`, `printings.set_code`, `card_faces.name`
-- [ ] Write migration `002_fts5.sql` (behind `fts` feature)
-  - [ ] Create FTS5 virtual table on `card_faces.name` + `card_faces.oracle_text`
-  - [ ] Create triggers to keep FTS index in sync on INSERT/UPDATE/DELETE
+- [x] Create `crates/elbrus-db/migrations/` directory
+- [x] Write migration `001_initial_schema.sql`
+  - [x] `oracle_cards` table: `oracle_id UUID PK`, `layout TEXT`, `color_identity INTEGER`, `keywords TEXT (JSON)`, `legalities TEXT (JSON)`, `edh_rank INTEGER`, `reserved BOOLEAN`
+  - [x] `card_faces` table: `oracle_id UUID FK`, `face_index INTEGER`, `name TEXT`, `mana_cost TEXT`, `type_line TEXT`, `oracle_text TEXT`, `colors INTEGER`, `power TEXT`, `toughness TEXT`, `loyalty TEXT`, `defense TEXT`, `flavor_text TEXT`
+  - [x] `printings` table: `id UUID PK`, `oracle_id UUID FK`, `set_code TEXT`, `collector_number TEXT`, `rarity TEXT`, `lang TEXT`, `released_at TEXT`, `image_uris TEXT (JSON)`, `promo BOOLEAN`, `digital BOOLEAN`, `full_art BOOLEAN`, `textless BOOLEAN`, `reprint BOOLEAN`, `prices TEXT (JSON)`
+  - [x] Indexes: on `oracle_cards.oracle_id`, `printings.oracle_id`, `printings.set_code`, `card_faces.name`
+- [x] Write migration `002_fts5.sql` (behind `fts` feature)
+  - [x] Create FTS5 virtual table on `card_faces.name` + `card_faces.oracle_text`
+  - [x] Create triggers to keep FTS index in sync on INSERT/UPDATE/DELETE
 - [ ] Implement `SqliteBackend` struct in `sqlite.rs`
   - [ ] Wrap `sqlx::SqlitePool`
   - [ ] Implement `StorageBackend` trait (execute, query, transaction)

@@ -12,3 +12,7 @@ elbrus-db = { path = "../elbrus-db" }
 anyhow.workspace = true
 tokio.workspace = true
 clap = { version = "4.5.60", features = ["derive"] }
+
+[[bin]]
+name = "elbrus"
+path = "src/main.rs"

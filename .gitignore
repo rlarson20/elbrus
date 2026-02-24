@@ -6,3 +6,5 @@
 
 #temporarily ignore CI
 /.github
+
+elbrus.db

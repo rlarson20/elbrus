@@ -27,9 +27,21 @@ impl ColorSet {
 /// Pips in a mana cost, in WUBRG order.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum Color {
-    W,
-    U,
-    B,
-    R,
-    G,
+    W, //White
+    U, //Blue
+    B, //Black
+    R, //Red
+    G, //Green
+}
+
+impl Color {
+    pub fn land(self) -> String {
+        match self {
+            Self::W => "Plains".to_owned(),
+            Self::U => "Island".to_owned(),
+            Self::B => "Swamp".to_owned(),
+            Self::R => "Mountain".to_owned(),
+            Self::G => "Forest".to_owned(),
+        }
+    }
 }

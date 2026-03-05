@@ -13,6 +13,7 @@ members = [
 	"crates/elbrus-cli",
 	"crates/elbrus-py",
 	"crates/elbrus-wasm",
+	"crates/elbrus-parser",
 ]
 
 [workspace.package]

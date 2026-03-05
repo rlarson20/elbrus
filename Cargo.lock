@@ -529,6 +529,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "elbrus-parser"
+version = "0.1.0"
+dependencies = [
+ "elbrus-core",
+ "nom",
+]
+
+[[package]]
 name = "elbrus-py"
 version = "0.1.0"
 dependencies = [

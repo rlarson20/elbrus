@@ -432,16 +432,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "elbrus-analysis"
-version = "0.1.0"
-dependencies = [
- "elbrus-core",
- "serde",
- "thiserror",
- "uuid",
-]
-
-[[package]]
 name = "elbrus-cli"
 version = "0.1.0"
 dependencies = [
@@ -451,26 +441,6 @@ dependencies = [
  "elbrus-db",
  "elbrus-scryfall",
  "tokio",
-]
-
-[[package]]
-name = "elbrus-collection"
-version = "0.1.0"
-dependencies = [
- "elbrus-core",
- "serde",
- "thiserror",
- "uuid",
-]
-
-[[package]]
-name = "elbrus-combos"
-version = "0.1.0"
-dependencies = [
- "elbrus-core",
- "serde",
- "thiserror",
- "uuid",
 ]
 
 [[package]]
@@ -519,16 +489,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "elbrus-draft"
-version = "0.1.0"
-dependencies = [
- "elbrus-core",
- "serde",
- "thiserror",
- "uuid",
-]
-
-[[package]]
 name = "elbrus-parser"
 version = "0.1.0"
 dependencies = [
@@ -548,17 +508,6 @@ dependencies = [
  "pyo3-build-config",
  "serde_json",
  "tokio",
-]
-
-[[package]]
-name = "elbrus-rules"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "elbrus-core",
- "serde",
- "thiserror",
- "uuid",
 ]
 
 [[package]]

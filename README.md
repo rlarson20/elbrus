@@ -21,6 +21,12 @@ Stubs (commented out in `Cargo.toml` until they have content):
 `elbrus-rules`, `elbrus-draft`, `elbrus-collection`, `elbrus-analysis`,
 `elbrus-combos`.
 
+## Roadmap
+
+Implementation plans live in [`docs/roadmap/`](docs/roadmap/). Start with
+[`overview.md`](docs/roadmap/overview.md) for the phase map and locked
+decisions; the per-phase files track checklist progress.
+
 ## Development
 
 ```bash
@@ -46,7 +52,7 @@ Each recipe maps to a `jq/<name>.jq` file with the same basename as its output.
 ```
 crates/        Rust crates
 jq/            jq programs used by the justfile
-docs/          roadmap and seed-conversation notes
+docs/          roadmap (split per phase) and seed-conversation notes
 scripts/       Python helpers for fetching/sampling Scryfall data
 data/          local-only: bulk JSON, exports, sqlite db (gitignored)
 ```

@@ -534,6 +534,8 @@ version = "0.1.0"
 dependencies = [
  "elbrus-core",
  "nom",
+ "serde_json",
+ "smallvec",
 ]
 
 [[package]]

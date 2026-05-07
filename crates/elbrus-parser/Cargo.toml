@@ -8,3 +8,7 @@ authors.workspace = true
 [dependencies]
 nom = "8"
 elbrus-core = { path = "../elbrus-core" }
+
+[dev-dependencies]
+serde_json.workspace = true
+smallvec.workspace = true

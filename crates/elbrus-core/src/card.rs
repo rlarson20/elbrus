@@ -34,10 +34,11 @@ pub enum CardLayout {
     Saga,
     Adventure,
     Prototype,
-    Battle,
+    Battle, //not actually used but in the API
     Mutate,
     Token,
     DoubleFacedToken,
+    ReversibleCard, //In a different export from the one I used
     Emblem,
     Augment,
     Host,

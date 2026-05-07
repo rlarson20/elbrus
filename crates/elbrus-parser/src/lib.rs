@@ -8,5 +8,5 @@ pub use nom;
 
 // Parser modules will be added here as the crate grows
 // pub mod card_text;
-// pub mod mana_cost;
+pub mod mana_cost;
 // pub mod oracle_text;
